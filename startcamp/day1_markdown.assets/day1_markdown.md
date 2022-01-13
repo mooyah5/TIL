@@ -215,7 +215,7 @@
 
      Git 로고입니다.
      
-     ![Git로고](day1_markdown.md.assets/logo@2x.png)
+     ![Git로고](day1_markdown.assets/logo@2x.png)
      
      
 
