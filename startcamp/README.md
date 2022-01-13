@@ -30,7 +30,9 @@
 ### Day1
 
 - startcamp
+
   - Day1
+
     - CLI
       - git init
       - git add [file name]
@@ -39,5 +41,17 @@
       - git status  - 상태확인
     - markdown
     - git / github
+
   - Day2
-    - 
+
+    - github 계정 생성
+
+    - git 명령어
+
+      ```
+      $ git add .
+      $ git commit -m "first commit"
+      $ git push -u origin master
+      ```
+
+    - gitignore
