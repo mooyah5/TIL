@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1 class="text-center">Either Game</h1>
+  <a href="{% url 'votes:create' %}" class="">[CREATE]</a>
+  <hr>
+  {% for vote in votes %}
+    <p>{{ vote.pk }} : <a href="{% url 'votes:detail' vote.pk %}">{{ vote.title }}</a></p>
+    <hr>
+  {% endfor %}
+{% endblock content %}

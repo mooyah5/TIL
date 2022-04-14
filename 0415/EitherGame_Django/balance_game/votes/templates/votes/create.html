@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <h1 class="text-center">CREATE</h1>
+  <form action="{% url 'votes:create' %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit" class="btn btn_primary" value='Submit'>
+  </form>
+  <hr>
+  <a href="{% url 'votes:index' %}">[BACK]</a>
+{% endblock content %}

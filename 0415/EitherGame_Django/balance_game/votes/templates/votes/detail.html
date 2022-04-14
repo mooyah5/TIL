@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <h3 class='text-center'>DETAIL</h3>
+  <a class="btn btn-success" href="{% url 'votes:index' %}">[BACK]</a>
+  <hr>
+  <h1 class='text-center'>{{ vote.title }}</h1>
+  <p>A : {{ vote.Issue_a }} : {{ voted_a }}%</p>
+  <p>B : {{ vote.Issue_b }} : {{ voted_b }}%</p>
+  <div class="container">
+    <div class="row">
+      <span class="text-start fs-5 fw-bolder text-danger">A : {{ vote.Issue_a }}</span>
+      <span class="text-end fs-5 fw-bolder text-primary">{{ vote.Issue_b }} : B</span>
+    </div>
+    <div class="row">
+      <div class="progress">
+        <div class="progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: {{ voted_a }}%"  aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: {{ voted_b }}%"  aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <br>
+  <h3>댓글 작성</h3>
+  <form action="{% url 'votes:comment_create' vote.pk %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form comment_form %}
+    <input type="submit" class="btn btn-warning">
+  </form>
+
+  <hr>
+  <br>
+  <h3>댓글 목록</h3>
+
+  {% for comment in comments %}
+    {% if comment.voting == 'A' %}
+      <div class="alert alert-danger" role="alert">
+        {{ comment.content }}
+      </div>
+    {% endif %}
+    {% if comment.voting == 'B' %}
+      <div class="alert alert-primary" role="alert">
+        {{ comment.content }}
+      </div>
+    {% endif %}
+    <hr>
+  {% endfor %}
+  <div class="container height=30"></div>>
+
+{% endblock content %}
