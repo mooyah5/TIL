@@ -87,7 +87,7 @@ HTTP method : GET, POST, DELETE, UPDATE 있는데 회사마다 다르기도 함
 - 어쩌구
 - 사실 URI는 수업자료에 URI vs URL vs URN
 - W3C 웹표준만드는 단체인데, 보통 URI 잘 안쓰고, URI라는 체계 안에 URL, URC, URN, DATA URI l있는데, 
-- ![image-20220420125820618](C:\Users\baekh\AppData\Roaming\Typora\typora-user-images\image-20220420125820618.png)
+- ![image-20220420125820618](0420 TIL Django API.assets/image-20220420125820618.png)
 - 전부 다 URI고 부분적으로 나뉨
 - Protocol            // HOST                 :PORT     /PATH             QueryString                            Fragment
 - https                  ://127.0.0.1           :8000      /articles/3      ?q="검색어"&title="제목"      #content
@@ -153,7 +153,7 @@ model form 이랑 거의 비슷함
 
 DRF를 통해서 RESTful한 API서버를 만들 수 있음
 
-예시)![image-20220420132039716](C:\Users\baekh\AppData\Roaming\Typora\typora-user-images\image-20220420132039716.png)
+예시)![image-20220420132039716](0420 TIL Django API.assets/image-20220420132039716.png)
 
 
 
@@ -167,7 +167,7 @@ DRF를 통해서 RESTful한 API서버를 만들 수 있음
 
 ### Build RESTful API
 
-![image-20220420132310388](0420 TIL Django API.assets/image-20220420132310388.png)
+![image-20220420132310388](0420 TIL Django API.assets/image-20220420132310388-16504431603851.png)
 
 - POST, GET이 가장 흔하게 쓰임
 - youtube data api 사이트 들어가면, 리소스나 작업이 있고, 
@@ -184,17 +184,17 @@ python manage.py migrate
 
 python manage.py seed articles --number 20
 
-![image-20220420151540954](0420 TIL Django API.assets/image-20220420151540954.png)
+![image-20220420151540954](0420 TIL Django API.assets/image-20220420151540954-16504431629172.png)
 
-![image-20220420151650709](0420 TIL Django API.assets/image-20220420151650709.png)
+![image-20220420151650709](0420 TIL Django API.assets/image-20220420151650709-16504431642283.png)
 
 개발자도구 Network 탭, Ctrl + R - type : text/html
 
-![image-20220420151852536](0420 TIL Django API.assets/image-20220420151852536.png)
+![image-20220420151852536](0420 TIL Django API.assets/image-20220420151852536-16504431685484.png)
 
 
 
-![image-20220420152202315](0420 TIL Django API.assets/image-20220420152202315.png)
+![image-20220420152202315](0420 TIL Django API.assets/image-20220420152202315-16504431703915.png)
 
 type : applications/json
 
@@ -213,7 +213,7 @@ json-2는 자동으로 해줌
     - 앱등록 : settings.py - INSTALLED_APPS = 'rest_framework'
   - django rest framework 공식문서 자주 보게 될 것
 
-​	![image-20220420154049097](0420 TIL Django API.assets/image-20220420154049097.png)
+​	![image-20220420154049097](0420 TIL Django API.assets/image-20220420154049097-16504431726516.png)
 
 직렬화 과정 거치고 응답하는 과정은 json-2와 비슷하나,
 
@@ -221,13 +221,13 @@ ArticleSeializer라는 게 있음
 
 form .serializers import ArticleSerializer(시리얼라이저스 모듈 안에 있는 클래스)
 
-![image-20220420154208567](0420 TIL Django API.assets/image-20220420154208567.png)
+![image-20220420154208567](0420 TIL Django API.assets/image-20220420154208567-16504431738037.png)
 
 문법이 model form과 똑같음(장고가 그렇게 만들어 놓음)
 
 ArticleSerializer = 게시글에 대한 정보 쿼리셋을 serialize해주는 도구임
 
-![image-20220420154410970](0420 TIL Django API.assets/image-20220420154410970.png)
+![image-20220420154410970](0420 TIL Django API.assets/image-20220420154410970-16504431753488.png)
 
 content type이 문서임
 
@@ -237,7 +237,7 @@ content type이 문서임
 
 ---
 
-![image-20220420154957402](0420 TIL Django API.assets/image-20220420154957402.png)
+![image-20220420154957402](0420 TIL Django API.assets/image-20220420154957402-16504431770209.png)
 
 스스로 만든 API
 
@@ -340,4 +340,93 @@ serializer = ArticleListSerializer(article)
 
 serializer => X
 
-serializer.data => {'id': 1, 'title': 'Above pull contain teacher law shoulder store.'}
+In [11]: serializer.data
+Out[11]: {'id': 1, 'title': 'Above pull contain teacher law shoulder store.'}
+
+In [12]: type(serializer.data)
+Out[12]: rest_framework.utils.serializer_helpers.ReturnDict
+
+---
+
+이건 단일객체일 때고, 이제 쿼리셋
+
+---
+
+In [13]: articles = Article.objects.all()
+
+In [14]: articles
+Out[14]: <QuerySet [<Article: Article object (1)>, <Article: Article object (2)>, <Article: Article object (3)>, <Article: Article object (4)>, <Article: Article object (5)>, <Article: Article object (6)>, <Article: Article object (7)>, <Article: Article object (8)>, <Article: Article object (9)>, <Article: Article object (10)>, <Article: Article object (11)>, <Article: Article object (12)>, <Article: Article object (13)>, <Article: Article object (14)>, <Article: Article object (15)>, <Article: Article object (16)>, <Article: Article object (17)>, <Article: Article object (18)>, <Article: Article object (19)>, <Article: Article object (20)>]>
+
+In [15]: serializer = ArticleListSerializer(articles)
+
+In [16]: serializer.data
+
+AttributeError
+
+---
+
+단일 객체가 아닌 쿼리셋의 경우 option(many=True) 필요
+
+In [17]: serializer = ArticleListSerializer(articles, many=True)      
+
+In [18]: serializer.data
+Out[18]: [OrderedDict([('id', 1), ('title', 'Above pull contain teacher law shoulder store.')]), OrderedDict([('id', 2), ('title', 'Back remain international man.')]), OrderedDict([('id', 3), ('title', 'Through head really subject ground.')]), OrderedDict([('id', 4), ('title', 'Yes enough I soon final.')]), OrderedDict([('id', 5), ('title', 'With school own house too special also.')]), OrderedDict([('id', 6), ('title', 'Thought college citizen social positive purpose world.')]), OrderedDict([('id', 7), ('title', 'Economic war that energy.')]), OrderedDict([('id', 8), ('title', 'Statement eat those think other benefit TV.')]), OrderedDict([('id', 9), ('title', 'Reveal order gas successful.')]), OrderedDict([('id', 10), ('title', 'Staff cultural executive box.')]), OrderedDict([('id', 11), ('title', 'Note cost society notice.')]), OrderedDict([('id', 12), ('title', 'Interest hand listen worker foot hospital outside.')]), OrderedDict([('id', 13), ('title', 'Condition thought level popular.')]), OrderedDict([('id', 14), ('title', 'Gas ask risk different police.')]), OrderedDict([('id', 15), ('title', 'Staff since morning identify.')]), OrderedDict([('id', 16), ('title', 'Those strong its near.')]), OrderedDict([('id', 17), ('title', 'Class alone federal see rise challenge.')]), OrderedDict([('id', 18), ('title', 'Many beautiful event involve oil.')]), OrderedDict([('id', 19), ('title', 'Reflect family between morning.')]), OrderedDict([('id', 20), ('title', 'Family maybe nature TV allow charge.')])]
+
+---
+
+### 'many' argument
+
+- many = True
+  - "Serializing multiple objects"
+  - 단일 인스턴스 대신 쿼리셋 등을 직렬화하기 위해서는 serializer를 인스턴스화 할 때 many=True를 키워드 인자로 전달해야 함
+  - ![image-20220420172546268](0420 TIL Django API.assets/image-20220420172546268-165044318119510.png)
+
+
+
+---
+
+### Build RESTful API
+
+![image-20220420172645873](0420 TIL Django API.assets/image-20220420172645873-165044320782811.png)
+
+이렇게 만약 빌드하면, view 함수가 몇 개 나올까?
+
+url이 2개이므로 하나씩 하면 2개겠다.
+
+articles/ => GET, POST
+
+articles/pk/ => GET, PUT< DELETE (variable routing 처리)
+
+
+
+1. GET - ARticle List
+
+   - url 및 view 함수 작성
+
+   - 전체 게시글에 대한 serialize 데이터를 리턴할 수 있는
+
+     ```python
+     urlpatterns = [
+     	path('articles/', views.article_list),
+     ]
+     ```
+
+     - app_name, url 안하나? - 불필요함. 쓸만한 곳이 없음. 요청받는 주소만 있으면 됨. 필요한 순간이 오면 작성해도 됨
+
+     ```python
+     from rest_framework.response import Response
+     from rest_framework.decorators import api_view
+     from .serializers import ArticleSerializer
+     
+     def article_list(request):
+     	articles = Article.objects.all()	# 쿼리셋 조회
+         serializer = ArticleListSerializer(articles, many=True)
+         return Response(serializer.data)
+     ```
+
+     - 이렇게 하고 runserver
+     - postman에 주소 입력 `http://127.0.0.1:8080/api/v1/articles/`
+     - `@api_view(['GET', 'POST'])` 데코레이터 필수
+       - 기본적을 GET메서드만 허용되며, 다른 메서드 요청에 대해서는 405 Method Not Allowed 로 응답
+       - View 함수가 응답해야 하는 HTTP 메서드 목록을 리스트의 인자로 받음
+       - DRF에서는 선택 아닌 **필수적으로** 작성해야 해당 view 함수가 정상동작함
