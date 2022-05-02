@@ -177,3 +177,183 @@ web api에 갔다오는 애들은 바로 가는 애들보다 무조건 우선순
      - Modern Web APIs에서의 새로운 코드 스타일
      - XMLHttpRequest 객체를 사용하는 구조보다 현대적인 버전
 
+
+
+---
+
+
+
+### callback function
+
+- 다른 함수에 인자로 전달된 함수
+- 외부 함수 내에서 호출되어 작업을 완료(루틴을)
+- 동기식, 비동기식 모두 사용됨 (but, 비동기 작업 후 코드 실행 계속하는 데 주로 사용)
+- 비동기 작업 후 코드 실행을 계속하는 데 사용되는경우 : 비동기 콜백 (asynchronous callback)
+
+
+
+###  일급 객체 (first class object)
+
+- 일급 객체 (일급 함수)
+
+  - 다른 객체들에 적용할 수 있는 연산을 모두 지원하는 객체
+
+- 조건
+
+  1. 인자로 넘기기 가능
+  2. 함수의 반환값으로 사용 가능
+  3. 변수에 할당 가능
+
+  ```javascript
+  const a = function () {} // 1조건
+  
+  a // f () {}
+  
+  function asdf (x) {
+      return x
+  }
+  asdf(a) // f () {}
+  ```
+
+
+
+### Async callbacks
+
+- 백그라운드에서 코드 실행을 시작할
+
+
+
+
+
+### callback hell
+
+![image-20220502144032150](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502144032150.png)
+
+- 해결하기
+
+1. Keep your code shallow (코드 깊이를 얕게 유지)
+2. Modularize (모듈화)
+3. Handle every single error (모든 단일 오류 처리)
+4. Prommise callvacks (promise 콜백 방식 사용)
+
+
+
+## Promise
+
+
+
+### Promise object
+
+약속하는거. 뭐 할건데 성공하면 뭐할거고 실패하면 뭐할거야 (방학계획표 ^^)
+
+- 비동기 작업의 최종완료 or 실패를 나타내는 객체
+  - 미래의 완료 or 실패와 그 결과값을 나타냄
+- 성공(이행)에 대한 약속 : `.then()`
+- 실패(거절)에 대한 약속 : `.catch()`
+
+![image-20220502144548609](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502144548609.png)
+
+
+
+- .then (callback)
+  - 이전작업이 성공했을 때 수행할 작업을 나타내는 콜백함수
+  - 그리고 각 콜백함수는 이전 작업의 성공 결과를 인자로 전달받음
+  - 따라서 성공했을 때의 코드를 콜백함수 안에 작성
+- .catch(callback)
+  - .then이 하나라도 실패하면(거부되면) 동작 (동기식의 try-except구문과 유사)
+  - 이전 작업 실패로 생성된 error 객체는 catch 블록 안에서 사용 가능
+
+
+
+### Promise가 보장하는 것
+
+- Async callback 작성 스타일과 다르게 promise가 보장하는 특징
+  1. callback 함수는 JS의 Event Loop가 현재 실행중인 Call Stack을 완료하기 전에는 절대 호출되지 않음 (프로미스 콜백함수는 이벤트 큐에 배치되는 엄격한 순서로 호출됨)
+  2. 비동기 작업이 성공하거나 실패한 뒤에 `.then()`메서드를 이용하여 추가한 경우에도 1번과 똑같이 동작
+  3. .then()을 여러 번 사용하여 여러 개의 callback 함수 추가 가능(Chaining)
+     - 각각의 콜백은 주어진 순서대로 하나하나 실행
+     - Chaining은 promise의 가장 뛰어난 장점
+
+
+
+### Axios
+
+- ''Promise based HTTP client for the browser and Node.js"
+
+- 브라우저를 위한 프로미스 기반 클라이언트
+
+- 원래 "XHR(XMLHttpRequest)"이라는 브라우저 내장 객체를 활용해 AJAX 요청을 처리하는데,
+
+- 이보다 편리한 AJAX 요청이 가능하도록 도움을 줌
+
+
+
+![image-20220502150402518](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502150402518-16514714428691.png)
+
+이 과정에서 새로고침이 나지 않음.
+
+
+
+![image-20220502150500277](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502150500277.png)
+
+
+
+![image-20220502150520851](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502150520851.png)
+
+Axios를 쓴 것과 안 쓴 것의 차이
+
+
+
+
+
+---
+
+
+
+![image-20220502151434224](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502151434224.png)
+
+
+
+jsonplaceholder
+
+![image-20220502151511895](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502151511895.png)
+
+
+
+![image-20220502151423087](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502151423087.png)
+
+
+
+![image-20220502151832569](0502 TIL axios를 이용한 비동기 통신.assets/image-20220502151832569.png)
+
+
+
+---
+
+
+
+
+
+axios vscode
+
+---
+
+
+
+### async & await
+
+- 비동기 코드를 작성하는 새로운 방법
+- 기존 Promise 시스템 위에 구축된 syntactic sugar
+  - Promise 구조의 then chaining을 제거
+  - 비동기 코드를 조금 더 동기 코드처럼 표현
+  - Syntactic sugar
+    - 더 쉽게 읽고 표현할 수 있도록 설계된 프로그래밍 언어 내 구문
+    - 즉, 문법적 기능은 그대로 유지 BUT 사용자가 직관적으로 코드를 읽을 수 있게 만듦
+
+
+
+
+
+
+
+AJAX 핵심은 끊기지 않고 물 흐르듯이
