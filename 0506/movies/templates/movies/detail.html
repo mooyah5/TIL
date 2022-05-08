@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="text-center">
+
+        <h1 class="my-3">DETAIL</h1>
+        <hr>
+        <div>
+            <img src="{{ movie.poster_path }}" alt="" class="img-fluid">
+        </div>
+        <hr>
+
+        <h4 class="my-3">{{ movie.title }}</h4>
+        <p>개봉일 : <img src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1576470996/noticon/ln5xivnzmcq8yzejnsub.png" alt="" style="width: 15px"> {{ movie.release_date }}</p>
+        <p>평점 : <img src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1609287743/noticon/oyo23yrstcp0rbd4uiqp.png" alt="" style="width: 15px"> {{ movie.vote_average }}</p>
+        <p>내용 : {{ movie.overview }}</p>
+    </div>
+{% endblock %}

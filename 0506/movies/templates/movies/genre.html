@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+    <h1 class="my-3 text-center">장르를 선택해주세요</h1>
+    <p class="text-center text-secondary">(최대 3개...)</p>
+
+
+    <form action="{% url 'movies:recommended' %}" method="POST" class="my-3 text-center">
+        {% csrf_token %}
+        <hr>
+        <div class="container" style="width: 600px;">
+            <div class="row text-center">
+                {% for genre in genres %}
+                <div class="form-check col-3">
+                    <input type="checkbox" value="{{ genre.id }}" class="btn-check" id="{{genre.id}}" autocomplete="off" name="test" >
+                    <label class="btn btn-outline-primary mx-1 my-1" for="{{genre.id}}" style="box-sizing: border-box; width: 130px;">{{ genre.name }}</label><br>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <hr>
+        <input type="submit" class="btn btn-primary my-3">
+    </form>
+    <div class="text-center">
+        <a href="{% url 'movies:index' %}" class="btn btn-secondary">BACK</a>
+    </div>
+{% endblock content %}

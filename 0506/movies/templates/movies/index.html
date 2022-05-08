@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Movies</h1>
+  <hr>
+  <div class="row row-cols-2 row-cols-lg-4 g-4">
+    {% for movie in movies %}
+    <div class="col">
+      <div class="card">
+        <img src="{{ movie.poster_path }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title img-fluid"><img src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1575057793/noticon/e4eukig4eptfib2pwhvo.svg" alt="" style="width: 15px;"> <a href="{% url 'movies:detail' movie.pk %}" class="text-decoration-none text-black">{{ movie.title }}</a></h5>
+          <p class="card-text">
+            <p><img src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1609287743/noticon/oyo23yrstcp0rbd4uiqp.png" alt="" style="width: 15px;"> {{ movie.vote_average }}</p>
+            {{ movie.overview|truncatechars:80 }}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}
