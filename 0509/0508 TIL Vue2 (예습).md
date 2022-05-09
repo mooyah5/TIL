@@ -494,7 +494,737 @@
 
    ![image-20220508182350649](0508 TIL Vue2 (예습).assets/image-20220508182350649.png)
 
-~ p.70
+
+
+##### index.js
+
+- 라우트 관련 정보, 설정이 작성되는 곳
+
+##### router-link
+
+- `<router-link>`
+  - 사용자 네비게이션을 가능케하는 컴포넌트
+  - 목표 경로는 `to` prop으로 지정
+  - html5 히스토리 모드에서 router-link는 클릭 이벤트를 차단, 브라우저가 페이지를 재로드하지 않도록 함
+  - a 태그지만, 우리가 알던 GET 요청을 보내는 a태그와는 좀 다르게, 기본 GET요청을 보내는 이벤트를 제거한 형태로 구성
+- `<router-view>`
+  - 주어진 라우트에 대해 일치하는 컴포넌트를 렌더링하는 컴포넌트
+  - 실제 컴포넌트가 DOM에 부착되어 보이는 자리를 의미
+  - router-link를 클릭하면 해당 경로와 연결된 index.js에 정의한 컴포넌트가 위치
+
+
+
+#### History Mode
+
+- tml History API를 사용해서 router를 구현한 것
+- 브라우저의 히스토리는 남기지만, 실제 페이지는 이동하지 않는 기능을 지원
+- 페이지 재로드 없이 URL 탐색 가능 (SPA의 단점 중 하나인 URL이 변경되지 않음을 해결)
+- 긍게, URL은 바뀌는 것처럼 보이는데, 새로고침은 되지 않고 있다는 뜻
+
+
+
+##### History API
+
+- DOM 의 Window 객체는 history 객체를 통해 브라우저의 세션 기록에 접근할 수 있는 방법을 제공
+- 히스토리 객체는 사용자를 자신의 방문 기록 앞, 뒤로 보내거나, 
+- 기록의 특정 지점으로 이동하는 등 유용한 메서드, 속성을 가진다.
+
+
+
+#### 1. Named Routes
+
+- 이름을 가지는 라우트
+- 명명된 경로로 이동하려면 객체를 vue-router 컴포넌트 요소의 prop에 전달
+
+#### 2. 프로그래밍 방식 네비게이션
+
+- `<router-lick>`를 사용하여 선언적 탐색을 위한 a태그를 만드는 것 외에도, router의 인스턴스 메서드를 사용하여 프로그래밍 방식으로 같은 작업 수행 가능
+
+  - 선언적 방식 : `<router-lick to="...">`
+  - 프로그래밍 방식 : `$router.push()`
+
+- Vue 인스턴스 내부에서 라우터 인스턴스에 `$router`로 접근 가능
+
+- SO, 다른 url로 이동하려면, `this.$router.push`로 호출 가능
+
+  - 이 메서드는 새 항목을 history stack에 넣으므로, 사용자가 브라우저 뒤로가기 버튼을 클릭할 시 이전 url로 이동하게 됨
+
+- `<router-link>`를 클릭할 때 내부적으로 호출되는 메서드이므로
+
+  - `<router-lick : to="...">`를 클릭하면 `router.push(...)`를 호출하는 것과 같음
+
+- 작성 가능 인자 예시
+
+  ```javascript
+  // literal string path
+  router.push('home')
+  
+  // object
+  router.push({ path: 'home' })
+  
+  // named route
+  router.push({ name: 'user', params: {userId: '123'} })
+  
+  // with query, resulting in /register?plan=private
+  router.push({ path: 'register', query: { plan: 'private' } })
+  ```
+
+- About에서 Home으로 이동하는 로직 작성
+
+  ```html
+  <template>
+      <div class="about">
+          <h1>이것은 어바웃 페이지</h1>
+          <button @click="moveToHome">Home으로 이동</button>
+      </div>
+  </template>
+  
+  <script>
+  	export default {
+          name: 'AboutView',
+          methods: {
+              moveToHome: function () {
+                  // this.$router.push('/')
+                  this.$router.push({ name: 'home' })
+              },
+          },
+      }
+  </script>
+  ```
+
+
+
+#### 3. Dynamic Route Matching
+
+- 동적 인자 전달
+
+- 주어진 패턴을 가진 라우트를 동일한 컴포넌트에 매핑해야 하는 경우
+
+- 예) 모든 User에 대해 동일 레이아웃을 가지지만, 다른 User ID로 렌더링 되어야하는 User 컴포넌트
+
+  ```javascript
+  const routes = [
+      {
+          path: '/user/:userId'
+          name: 'User',
+          component: User
+      },
+  ]
+  ```
+
+- 동적인자는 콜론( : )으로 시작함
+
+- 컴포넌트에서 `this.$rout.params`로 사용가능
+
+
+
+#### components 와 views
+
+- 기본적으로 작성된 구조에서 컴포넌츠 폴더와 뷰스 폴더 안에 각기 다른 컴포넌트가 존재
+- 컴포넌트를 작성해 갈 때 정해진 구조가 있는 건 아니고, 주로 아래처럼 구조화
+- `App.vue`
+  - 최상위 컴포넌트
+- `views/`
+  - router(index.js)에 매핑되는 컴포넌트를 모아두는 폴더
+  - 예) App 컴포넌트 내부에 AboutView & HomeView 컴포넌트 등록
+- `components/`
+  - router에 매핑된 컴포넌트 내부에 작성하는 컴포넌트를 모아두는 폴더
+  - 예) Home 컴포넌트 내부에 HelloWorld 컴포넌트 등록
+
+
+
+#### view router 필요성
+
+1. SPA 등장 전
+
+   - 서버가 모든 라우팅을 통제
+   - 요청 경로에 맞는 html 제공
+
+2. SPA 등장 후
+
+   - 서버는 index.js 하나만 제공
+   - 이후 모든 처리는 html 위에서 js코드 활용하여 진행
+     - 요청 처리를 더이상 서버가 할 필요가 없어짐(하지 않음)
+
+3. 라우팅 처리 차이
+
+   1. SSR
+      - 라우팅 결정권을 서버가 가짐
+   2. CSR
+      - 라우팅 결정권을 클라이언트가 가짐
+        - 클라이언트가 더 이상 서버로 요청을 보내지 않고
+        - 응답받은 html 문서 안에서 주소가 변경되면
+        - 특정 주소에 맞는 컴포넌트를 렌더링
+
+   - 결국 Vue Router는 라우팅 결정권을 가진 Vue.js에서 라우팅을 편리하게 할 수 있는 Tool을 제공해주는 라이브러리
+
+---
+
+
+
+## Youtube Project
+
+
+
+#### 컴포넌트 관계
+
+
+
+![image-20220510022936891](0508 TIL Vue2 (예습).assets/image-20220510022936891.png)
+
+
+
+#### 1. 프로젝트 준비
+
+- 프로젝트 생성 및 lodash 설치
+
+  ```bash
+  $ vue create youtube-project
+  $ cd youtube-project
+  $ npm i lodash
+  ```
+
+#### 2. 유트브 검색 데이터 (TheSearchBar.vue)
+
+##### 1) 컴포넌트 등록
+
+```html
+// App.vue
+<template>
+	<div id="app">
+        <h1>My first Youtube Project</h1>
+        <the-search-bar></the-search-bar>
+    </div>
+</template>
+
+<script>
+import TheSearchBar from '@/components/TheSearchBar'
+    
+export default {
+    name: 'App',
+    components: {
+        TheSearchBar,
+    },
+    ...
+}
+</script>
+```
+
+##### 2) Emit Event (TheSearchBar.vue => App.vue)
+
+```html
+// TheSearchBar.vue
+
+<template>
+	<div>
+        <input @keyup.enter="onInputKeyWord" type="text">
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'searchBar',
+    methods: {
+        onInputKeyword: function (event) {
+            this.$emit('input-change', event.target.value)
+        }
+    }
+}
+</script>
+```
+
+##### 3) 이벤트 청취 후 함께 전달 된 데이터 할당
+
+```html
+// App.vue
+<template>
+	<div id="app">
+        <h1>My first Youtube Project</h1>
+        <the-search-bar @input-change="onInputChange"></the-search-bar>
+    </div>
+</template>
+
+<script>
+import TheSearchBar from '@/components/TheSearchBar'
+    
+export default {
+    
+    name: 'App',
+    components: {
+        TheSearchBar,
+    },
+    ...
+    data: function () {
+        return {
+            inputValue: null,
+        }
+    },
+    methods: {
+        onInputChange: function (inputText) {
+            // console.log(this) -> Vue instance
+            this.inputvalue = inputText
+            // console.log(this.inputValue)
+        }
+    }
+}
+</script>
+```
+
+
+
+#### 3. 유튜브 요청 & 응답 데이터 처리 (App.vue)
+
+##### 1) API_KEY, API_URL 할당
+
+​	https://developers.google.com/youtube/v3/docs/search/list?hi=ko
+
+##### 2) Youtube API 요청 & 응답 데이터를 변수에 할당
+
+```html
+// App.vue
+<template>
+	<div id="app">
+        <h1>My first Youtube Project</h1>
+        <the-search-bar @input-change="onInputChange"></the-search-bar>
+    </div>
+</template>
+
+<script>
+import TheSearchBar from '@/components/TheSearchBar'
+import axios from 'axios'
+import TheSearchBar from './components/TheSearchBar.vue'
+
+const API_KEY = ???
+const API_URL = 'https://www.googleapis.com/youtube/v3/search'
+    
+export default {
+    name: 'App',
+    data: function () {
+        return {
+            inputValue: null,
+            videos: [],
+        }
+    },
+    components: {
+        TheSearchBar,
+    },
+    methods: {
+        onInputChange: function (inputText) {
+            // console.log(this) -> Vue instance
+            this.inputvalue = inputText
+            // console.log(this.inputValue)
+            
+            const params = {
+                key: API_KEY,
+                part: 'snippet',
+                type: 'video',
+                q: this.inputValue,
+            }
+            axios({
+                method: 'get',
+                url: API_URL,
+                params,
+            })
+            .then(res => {
+                console.log(res)
+                this.videos = res.data.items
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+    }
+}
+</script>
+```
+
+##### 3) Pass props (App.vue => VideoList.vue)
+
+할당한 응답 데이터를 하위 컴포넌트로 전달
+
+![image-20220510024441031](0508 TIL Vue2 (예습).assets/image-20220510024441031.png)
+
+```html
+// App.vue
+<template>
+	<div id="app">
+        <h1>My first Youtube Project</h1>
+        <header>
+        	<the-search-bar @input-change="onInputChange"></the-search-bar>
+        </header>
+        <section>
+        	<video-list :videos="videos"></video-list>
+        </section>
+    </div>
+</template>
+```
+
+##### 4) 내려받은 prop 데이터 선언 후 사용
+
+```html
+// VideoList.vue
+
+<template>
+	<ul>
+        <li v-for="video in videos" :key="video.id.videoId">
+        {{ video.snippet.title }}
+        </li>
+    </ul>
+</template>
+
+<script>
+export default {
+    name: 'VideoList',
+    props: {
+        videos: {
+            type: Array,
+            required: true,
+        }
+    }
+}
+</script>
+```
+
+##### 5) Pass props (VideoList.vue => VideoListItem.vue)
+
+```html
+// VideoList.vue
+
+<template>
+	<ul>
+        <li v-for="video in videos"
+            :key="video.id.videoId"
+            :video="video">
+        {{ video.snippet.title }}
+        </li>
+    </ul>
+</template>
+
+<script>
+export default {
+    name: 'VideoList',
+    props: {
+        videos: {
+            type: Array,
+            required: true,
+        }
+    }
+}
+</script>
+```
+
+##### 6) 내려받은 prop 데이터 (개별 비디오 객체) 선언 후 사용
+
+```html
+// VideoListItem.vue
+
+<template>
+	<ul>
+        <li>
+            <img :src="video.snippet.thumbnails.default.url" alt="youtube-thumbnail-image">{{ video.snippet.title }}
+        </li>
+    </ul>
+</template>
+
+<script>
+export default {
+    name: 'VideoListItem',
+    props: {
+        videos: {
+            type: Object,
+            required: true,
+        }
+    }
+}
+</script>
+```
+
+
+
+#### 4. 유튜브 상세 영상 정보 - VideoDetail.vue
+
+##### 1) 유튜브 상세 영상 정보 알리기
+
+- VideoListItem.vue => VideoList.vue
+
+  ```html
+  // VideoListItem.vue
+  
+  <template>
+  	<ul>
+          <li @click="selectVideo">
+              <img :src="video.snippet.thumbnails.default.url" alt="youtube-thumbnail-image">{{ video.snippet.title }}
+          </li>
+      </ul>
+  </template>
+  
+  <script>
+  export default {
+      name: 'VideoListItem',
+      props: {
+          videos: {
+              type: Object,
+              required: true,
+          }
+      },
+      methods: {
+          selectVideo: function () {
+              this.$emit{'select-video', this.video}
+          }
+      },
+  }
+  </script>
+  ```
+
+  ```html
+  // VideoList.vue
+  
+  <template>
+  	<ul>
+          <li v-for="video in videos"
+              :key="video.id.videoId"
+              :video="video"
+              @select-video="onSelectVideo">
+          {{ video.snippet.title }}
+          </li>
+      </ul>
+  </template>
+  
+  <script>
+  export default {
+      name: 'VideoList',
+      props: {
+          videos: {
+              type: Array,
+              required: true,
+          }
+      },
+      methods: {
+          onSelectVideo: function (video) {
+              // console.log(video)
+              this.$emit('select-video', video)
+          }
+      }
+  }
+  </script>
+  ```
+
+- VideoList.vue => App.vue
+
+  ```html
+  // App.vue
+  <template>
+  	<div id="app">
+          <h1>My first Youtube Project</h1>
+          <header>
+          	<the-search-bar @input-change="onInputChange"></the-search-bar>
+          </header>
+          <section>
+          	<video-list :videos="videos" @select-video="onVideoSelect"></video-list>
+          </section>
+      </div>
+  </template>
+  
+  <script>
+  import TheSearchBar from '@/components/TheSearchBar'
+  import axios from 'axios'
+  import TheSearchBar from './components/TheSearchBar.vue'
+  
+  const API_KEY = ???
+  const API_URL = 'https://www.googleapis.com/youtube/v3/search'
+      
+  export default {
+      name: 'App',
+      data: function () {
+          return {
+              inputValue: null,
+              videos: [],
+              selectedVideo: null,
+          }
+      },
+      components: {
+          TheSearchBar,
+      },
+      methods: {
+          onInputChange: function (inputText) {
+              // console.log(this) -> Vue instance
+              this.inputvalue = inputText
+              // console.log(this.inputValue)
+              
+              const params = {
+                  key: API_KEY,
+                  part: 'snippet',
+                  type: 'video',
+                  q: this.inputValue,
+              }
+              axios({
+                  method: 'get',
+                  url: API_URL,
+                  params,
+              })
+              .then(res => {
+                  console.log(res)
+                  this.videos = res.data.items
+              })
+              .catch(err => {
+                  console.log(err)
+              })
+          },
+          onVideoSelect: function (video) {
+              this.selectedVideo = video
+          }
+      },
+  }
+  </script>
+  ```
+
+- App 컴포넌트에서 내린 데이터가 VideoDetail에 전달 되었는지 확인
+
+  ```html
+  // App.vue
+  <template>
+  	<div id="app">
+          <h1>My first Youtube Project</h1>
+          <header>
+          	<the-search-bar @input-change="onInputChange"></the-search-bar>
+          </header>
+          <section>
+              <video-detail :video="selectedVideo"></video-detail>
+          	<video-list :videos="videos" @select-video="onVideoSelect"></video-list>
+          </section>
+      </div>
+  </template>
+  
+  <script>
+  import TheSearchBar from '@/components/TheSearchBar'
+  import axios from 'axios'
+  import TheSearchBar from './components/TheSearchBar.vue'
+  
+  const API_KEY = ???
+  const API_URL = 'https://www.googleapis.com/youtube/v3/search'
+      
+  export default {
+      name: 'App',
+      data: function () {
+          return {
+              inputValue: null,
+              videos: [],
+              selectedVideo: null,
+          }
+      },
+      components: {
+          SearchBar,
+          VideoList,
+          VideoDetail,
+      },
+      methods: {
+          onInputChange: function (inputText) {
+              // console.log(this) -> Vue instance
+              this.inputvalue = inputText
+              // console.log(this.inputValue)
+              
+              const params = {
+                  key: API_KEY,
+                  part: 'snippet',
+                  type: 'video',
+                  q: this.inputValue,
+              }
+              axios({
+                  method: 'get',
+                  url: API_URL,
+                  params,
+              })
+              .then(res => {
+                  console.log(res)
+                  this.videos = res.data.items
+              })
+              .catch(err => {
+                  console.log(err)
+              })
+          },
+          onVideoSelect: function (video) {
+              this.selectedVideo = video
+          }
+      },
+  }
+  </script>
+  ```
+
+- App.vue => VideoDetail.vue
+
+  ```html
+  // VideoDetail.vue
+  
+  <template>
+  	<div>
+          {{ video }}
+      </div>
+  </template>
+  
+  <script>
+  export default {
+      name: 'VideoDetail',
+      props: {
+          video: {
+              type: Object,
+          }
+      }
+  }
+  </script>
+  ```
+
+- VideoDetail 컴포넌트 마무리
+
+- Youtuve iframe 문서를 참고하여 videoId 값 찾기
+
+  - https://developers.google.com/youtuve/plater_parameters?hl=ko
+
+```html
+// VideoDetail.vue
+
+<template>
+	<div v-if="video" class="video-detail">
+        <iframe :src="videoURI" frameborder="0"></iframe>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'VideoDetail',
+    props: {
+        video: {
+            type: Object,
+        }
+    },
+    computed: {
+        videoURI: function () {
+            const videoId = this.video.id.videoId
+            return 'https://www.youtuve.com/embed/${videoId}'
+        },
+    },
+}
+</script>
+```
+
+
+
+#### 5. Environment Variable
+
+- API 키 환경변수 설정
+
+  ![image-20220510030301047](0508 TIL Vue2 (예습).assets/image-20220510030301047.png)
+
+- 프로젝트 최상단에 배치하여 환경 변수 지정 가능
+
+- `NODE_ENV`, `BASE_URL` 및 `VUE_APP_`로 시작하는 변수만 클라이언트 번들에 정적으로 포함됨
+
+- `.env.local`에 작성하는 환경변수는 개발 단계에서 원격 저장소에 노출시키지 않기 위해 git에서 무시되며, 모든 경우에 로드하기 위해 사용
+
+- 단, 환경 변수는 빌드에 포함되므로 누구나 앱 파일을 검사하여 볼 수 있으며, 실제 배포 단계에서는 배포 서비스에서 이러한 환경 변수를 설정할 수 있도록 환경을 제공함
+
+  - 환경변수
+    - 컴퓨터에서 동작하는 방식에 영향을 미치는, 동적인 값들의 모임
+    - 시스템의 실행 파일이 놓여 있는 디렉터리의 경로 등 운영체제 상에서 동작하는 응용프로그램이 참조하기 위한 설정이 기록됨
 
 ---
 
