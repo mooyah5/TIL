@@ -236,7 +236,7 @@
 
 #### Vue 프로젝트 구조
 
-- `node_modules` : node.js 환경의 여러 의존성 모듈
+- `node_modules` : node.js 환경의 여러 의존성 모듈 (venv같은 것)
 - `public/index.htm`l : Vue 앱의 뼈대 파일, 실제 제공되는 단일 html 파일
 - `src/assets` : webpack에 의해 빌드 된 정적 파일
 - `src/components` : 하위 컴포넌트들이 위치
@@ -246,12 +246,16 @@
   - 실제 단일 파일에서 DOM과 data를 연결 했던 것과 동일한 작업이 이루어지는 공간
   - Vue 전역에서 활용 할 모듈을 등록할 수 있는 파일
 - `babel.config.js` : babel 관련 설정이 작성된 파일
-- `package.json` : 프로젝트 종속성 목록, 지원되는 브라우저에 대한 구성 옵션 포함
-- `package-lock.json` 
+- `package.json` : 프로젝트 종속성 목록, 지원되는 브라우저에 대한 구성 옵션 포함 (requirements.txt 같은 것)
+- `package-lock.json`  ( package.json과 세트)
   - node_modules에 설치되는 모듈과 관련된 모든 의존성을 설정, 관리
   - 팀원, 배포환경에서 정확하게 동일한 종속성을 설치하도록 보장하는 표현
   - 사용 할 패키지 버전 고정
   - 개발 과정 간 의존성 패키지 충돌 방지
+
+
+
+---
 
 
 
@@ -278,6 +282,10 @@
 
 #### 컴포넌트 구조
 
+<img src="0508 TIL Vue2 (예습).assets/image-20220509143651875.png" alt="image-20220509143651875" style="zoom:67%;" />
+
+(vue 작성 후 enter : vetur가 작성해줌 ㅎㅎ)
+
 1. 템플릿 (HTML)
 2. 스크립트 (Javascript)
 3. 스타일 (CSS)
@@ -301,6 +309,8 @@
 ##### 스타일
 
 - CSS 작성됨. 컴포넌트의 스타일을 담당
+
+---
 
 
 
@@ -366,19 +376,21 @@
 
 ​	![image-20220508181342921](0508 TIL Vue2 (예습).assets/image-20220508181342921.png)
 
+![image-20220509150927356](0508 TIL Vue2 (예습).assets/image-20220509150927356.png)
 
+컴포넌트를 재사용하다보니 전부 오른쪽을 사용하는데, 다같이 하나를 공유해버림. 각각이 형제라고 한다면, 
 
 #### Props 시 자주하는 실수
 
 - Static 구문을 사용하여 숫자를 전달하려고 시도하는 것
 
-- 실제 JS 숫자를 전달하려면 값이 JS 표현식으로 평가되도록 v-bind를 사용해야 함
+- 실제 JS 숫자를 전달하려면 값이 JS 표현식으로 평가되도록 **v-bind**를 사용해야 함
 
   ![image-20220508181428095](0508 TIL Vue2 (예습).assets/image-20220508181428095.png)
 
 
 
-#### 단방향 데이터 흐름
+#### 단방향 데이터 흐름 (부모님께 말하기)
 
 - 모든 props는 하위 속성과 상위 속성 사이 **단방향** 바인딩을 형성
 - 부모 속성이 변경되면 자식 속성에게 전달되지만, 반대 방향으로는 안 됨
@@ -387,14 +399,15 @@
 
 
 
-#### Emit event
+#### Emit event (이벤트를 발신하다)
 
-- Listening to Child Components Events
-- $emit (eventName)
+> Listening to Child Components Events
+
+- $emit (eventName) = **발송하다.**
   - 현재 인스턴스에서 이벤트를 트리거
   - 추가 인자는 리스터의 콜백 함수로 전달
 
-- 부모 컴포넌트는 자식이 사용되는 템플릿에서 v-on을 사용하여 자식이 보낸 이벤트를 청취
+- **부모 컴포넌트는** 자식이 사용되는 템플릿에서 **v-on**을 사용하여 자식이 보낸 **이벤트를 청취**
 
 
 
@@ -431,7 +444,8 @@
 #### Vue Router
 
 - Vue.js 공식 라우터
-- 라우트에 컴포넌트를 매핑한 후, 어떤 주소에서 렌더링할 지 알려줌
+- 라우트에 **컴포넌트**를 매핑한 후, 어떤 주소에서 렌더링할 지 알려줌
+- **컴포넌트와 주소를 매핑함** (실제 새로고침, 화면전환, url변화가 없는데 눈속임함)
 - SPA 상에서 라우팅을 쉽게 개발할 수 있는 기능을 제공
 - router
   - 위치에 대한 최적 경로를 지정하며, 이 경로를 따라 데이터를 다음 장치로 전향시키는 장치
@@ -484,3 +498,46 @@
 
 ---
 
+![image-20220509150614358](0508 TIL Vue2 (예습).assets/image-20220509150614358.png)
+
+---
+
+<img src="0508 TIL Vue2 (예습).assets/image-20220509150405439.png" alt="image-20220509150405439" style="zoom:67%;" />
+
+이렇게 하면 에러남. Component template should contain exactly one root element. If you are using v-if on multiple elements, use v-else-if to chain them instead.
+
+템플릿 안에는 반드시 하나의 element만 있어야 한다.
+
+그래서 div 태그 안에 다 넣어야 함..ㅋㅋㅋㅋ (그렇구나...)
+
+<img src="0508 TIL Vue2 (예습).assets/image-20220509150509720.png" alt="image-20220509150509720" style="zoom:67%;" />
+
+
+
+---
+
+components랑 views의 차이
+
+거대한 html 파일 안에 거의비슷하게 거대한 app.vue가 있는데, 그게 app이다.
+
+그런데, router로 이동 가능한 공간이 두 가지 있음 (Home, About)
+
+Home도 어느정도 큰 조각이라 새끼 하나 가지고 있음 (HelloWorld.vue)
+
+views 폴더 안에는 '라우터 급'인 애들이 들어가는 게 좋다.
+
+그럼 component 는? 그 밑 조그마한 조각들을 넣는 게 국룰
+
+그런데, 더 큰 프로젝트를 하다보면 합의해서 바꿀 수 있는 문제임.
+
+아무튼 바로 vue를 만들면 이렇게 짜져있다는 것
+
+그래서, 지금은 일단, 마침 부모자식관계니까 Home으로 props emit으로 짜고, 
+
+---
+
+app.vue 안의 HomeView 안의 Helloworld에서 뒤 두개 emit 연결해주기
+
+홈뷰에서 헬로월드는 내려주는거 (props)
+
+헬로월드에서 홈뷰는 emit으로 커스..이벤트..올려주는거
