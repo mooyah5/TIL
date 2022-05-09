@@ -139,7 +139,7 @@
 
 #### Vue 프로젝트 구조
 
-![image-20220508175254683](C:\Users\baekh\AppData\Roaming\Typora\typora-user-images\image-20220508175254683.png)
+![image-20220508175254683](0508 TIL Vue2 (예습).assets/image-20220508175254683.png)
 
 
 
