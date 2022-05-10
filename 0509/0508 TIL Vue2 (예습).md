@@ -794,7 +794,7 @@ import TheSearchBar from '@/components/TheSearchBar'
 import axios from 'axios'
 import TheSearchBar from './components/TheSearchBar.vue'
 
-const API_KEY = ???
+const API_KEY = 'AIzaSyBDCH20EbGZ0Rid-FEbHkFgP9SBktV6I48'
 const API_URL = 'https://www.googleapis.com/youtube/v3/search'
     
 export default {
@@ -1271,3 +1271,7 @@ app.vue 안의 HomeView 안의 Helloworld에서 뒤 두개 emit 연결해주기
 홈뷰에서 헬로월드는 내려주는거 (props)
 
 헬로월드에서 홈뷰는 emit으로 커스..이벤트..올려주는거
+
+---
+
+![image-20220510031302344](0508 TIL Vue2 (예습).assets/image-20220510031302344.png)
