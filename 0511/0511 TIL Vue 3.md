@@ -600,7 +600,7 @@ actions: {
 
 #### Mutations handler name
 
-Mutations 함수의 이름은 상수 작성 권장
+Mutations 함수의 이름은 상수(ALL CAPITAL) 작성 권장
 
 ​	linter와 같은 tool에서 디버깅하기에 유용, 전체 app에서 어떤게 mutations인지 빠른 파악 가능
 
